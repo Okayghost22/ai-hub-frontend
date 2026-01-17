@@ -568,11 +568,14 @@ function App() {
                                   <h3 className="text-sm font-black tracking-[0.4em] uppercase flex items-center gap-4"><Zap className="text-purple-500 fill-purple-500/20" size={20} /> Neural Flow Map</h3>
                                   <button onClick={() => setIsAiOpen(true)} className="px-10 py-3 bg-purple-500 rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:scale-105 transition-all">Launch AI Analysis</button>
                               </div>
-                              <div className="h-[350px]">
-                                {loadingPRs ? (
-                                  <div className="h-full flex flex-col items-center justify-center gap-4"><Loader2 className="animate-spin text-purple-500" size={48} /><p className="text-[9px] font-mono uppercase tracking-widest text-white/30">{LOADING_STEPS[loaderStep]}</p></div>
+                              <div className="h-[350px] min-h-[350px] w-full min-w-0"> 
+    {loadingPRs ? (
+        <div className="h-full flex flex-col items-center justify-center gap-4">
+            <Loader2 className="animate-spin text-purple-500" size={48} />
+            <p className="text-[9px] font-mono uppercase tracking-widest text-white/30">{LOADING_STEPS[loaderStep]}</p>
+        </div>
                                 ) : (
-                                  <ResponsiveContainer width="100%" height="100%">
+                                  <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={350}>
                                     <BarChart data={visiblePrs.slice(0, 15)}>
                                       <defs>
                                         <linearGradient id="riskHigh" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#ef4444" stopOpacity={1}/><stop offset="95%" stopColor="#ef4444" stopOpacity={0.2}/></linearGradient>
