@@ -574,16 +574,15 @@ function App() {
   </div>
 
   {/* FIX: Ensure the height is set on the DIV and NOT just the chart */}
-  <div style={{ height: '350px', width: '100%', minWidth: '0px', position: 'relative' }}>
+  <div style={{ width: '100%', height: '350px', position: 'relative', overflow: 'hidden' }}>
     {loadingPRs ? (
-      <div className="h-full flex flex-col items-center justify-center gap-4">
+      <div className="h-full flex flex-col items-center justify-center">
         <Loader2 className="animate-spin text-purple-500" size={48} />
-        <p className="text-[9px] font-mono uppercase tracking-widest text-white/30">{LOADING_STEPS[loaderStep]}</p>
       </div>
     ) : (
       /* FIX: Remove minHeight from here and use aspect if needed, 
          but mostly ensure it is wrapped in the fixed-height div above */
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height="100%" debounce={50}>
         <BarChart data={visiblePrs.slice(0, 15)} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
           <defs>
             <linearGradient id="riskHigh" x1="0" y1="0" x2="0" y2="1">
