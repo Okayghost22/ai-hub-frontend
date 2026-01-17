@@ -564,49 +564,48 @@ function App() {
                             </div>
 
                             <div className="glass-morphism rounded-[3rem] p-12 relative mb-24 border border-white/5">
-                              <div className="flex justify-between items-center mb-12">
-                                  <h3 className="text-sm font-black tracking-[0.4em] uppercase flex items-center gap-4"><Zap className="text-purple-500 fill-purple-500/20" size={20} /> Neural Flow Map</h3>
-                                  <button onClick={() => setIsAiOpen(true)} className="px-10 py-3 bg-purple-500 rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:scale-105 transition-all">Launch AI Analysis</button>
-                              </div>
-                              <div className="h-[350px] min-h-[350px] w-full min-w-0"> 
+  <div className="flex justify-between items-center mb-12">
+    <h3 className="text-sm font-black tracking-[0.4em] uppercase flex items-center gap-4">
+      <Zap className="text-purple-500 fill-purple-500/20" size={20} /> Neural Flow Map
+    </h3>
+    <button onClick={() => setIsAiOpen(true)} className="px-10 py-3 bg-purple-500 rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:scale-105 transition-all">
+      Launch AI Analysis
+    </button>
+  </div>
+
+  {/* FIX: Ensure the height is set on the DIV and NOT just the chart */}
+  <div style={{ height: '350px', width: '100%', minWidth: '0px', position: 'relative' }}>
     {loadingPRs ? (
-        <div className="h-full flex flex-col items-center justify-center gap-4">
-            <Loader2 className="animate-spin text-purple-500" size={48} />
-            <p className="text-[9px] font-mono uppercase tracking-widest text-white/30">{LOADING_STEPS[loaderStep]}</p>
-        </div>
-                                ) : (
-                                  <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={350}>
-                                    <BarChart data={visiblePrs.slice(0, 15)}>
-                                      <defs>
-                                        <linearGradient id="riskHigh" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#ef4444" stopOpacity={1}/><stop offset="95%" stopColor="#ef4444" stopOpacity={0.2}/></linearGradient>
-                                        <linearGradient id="riskLow" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#a855f7" stopOpacity={1}/><stop offset="95%" stopColor="#6366f1" stopOpacity={0.2}/></linearGradient>
-                                      </defs>
-                                      <Bar dataKey="cycle_days" radius={[10, 10, 10, 10]}>
-                                        {visiblePrs.map((entry, index) => (<Cell key={`cell-${index}`} fill={entry.riskScore > 70 ? "url(#riskHigh)" : "url(#riskLow)"} />))}
-                                      </Bar>
-                                      <RechartsTooltip cursor={{fill: 'rgba(255,255,255,0.05)'}} content={({ active, payload }) => {
-                                          if (active && payload && payload.length) {
-                                            const data = payload[0].payload;
-                                            return (
-                                              <div className="glass-morphism p-4 border border-white/10 rounded-xl shadow-2xl backdrop-blur-md">
-                                                <p className="text-[10px] font-bold text-purple-400 uppercase mb-1">{data.title}</p>
-                                                <p className="text-lg font-black italic">{payload[0].value} Days</p>
-                                                <div className="h-[1px] w-full bg-white/10 my-2" />
-                                                <div className="flex flex-col gap-1">
-                                                  <p className="text-[9px] text-white/40 uppercase">Complexity: {data.riskScore}%</p>
-                                                  {data.riskScore > 70 && <div className="flex items-center gap-2 text-red-500 animate-pulse"><AlertTriangle size={12} /><p className="text-[8px] font-bold uppercase tracking-tighter">Conflict Risk</p></div>}
-                                                </div>
-                                              </div>
-                                            );
-                                          }
-                                          return null;
-                                        }}
-                                      />
-                                    </BarChart>
-                                  </ResponsiveContainer>
-                                )}
-                              </div>
-                            </div>
+      <div className="h-full flex flex-col items-center justify-center gap-4">
+        <Loader2 className="animate-spin text-purple-500" size={48} />
+        <p className="text-[9px] font-mono uppercase tracking-widest text-white/30">{LOADING_STEPS[loaderStep]}</p>
+      </div>
+    ) : (
+      /* FIX: Remove minHeight from here and use aspect if needed, 
+         but mostly ensure it is wrapped in the fixed-height div above */
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={visiblePrs.slice(0, 15)} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+          <defs>
+            <linearGradient id="riskHigh" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#ef4444" stopOpacity={1}/>
+              <stop offset="95%" stopColor="#ef4444" stopOpacity={0.2}/>
+            </linearGradient>
+            <linearGradient id="riskLow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#a855f7" stopOpacity={1}/>
+              <stop offset="95%" stopColor="#6366f1" stopOpacity={0.2}/>
+            </linearGradient>
+          </defs>
+          <Bar dataKey="cycle_days" radius={[10, 10, 10, 10]}>
+            {visiblePrs.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.riskScore > 70 ? "url(#riskHigh)" : "url(#riskLow)"} />
+            ))}
+          </Bar>
+          <RechartsTooltip cursor={{fill: 'rgba(255,255,255,0.05)'}} />
+        </BarChart>
+      </ResponsiveContainer>
+    )}
+  </div>
+</div>
                           </motion.div>
                         )}
                       </AnimatePresence>
