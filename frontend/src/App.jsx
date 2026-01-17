@@ -445,10 +445,24 @@ function App() {
                   <h1 className="text-8xl md:text-[14rem] font-black tracking-tighter leading-none uppercase italic relative">AI <span className="outline-text">HUB</span></h1>
                   <p className="text-purple-400 font-mono text-xs tracking-[1.2em] uppercase mt-8 animate-pulse">Spatial Intelligence v4.0</p>
                 </motion.div>
-              <div className="flex flex-col md:flex-row gap-6 justify-center mt-20 relative z-30">
-                <button onClick={() => setShowHero(false)} className="px-16 py-6 bg-white text-black font-black uppercase tracking-[0.2em] rounded-full hover:scale-110 hover:shadow-[0_0_50px_rgba(255,255,255,0.4)] transition-all duration-500">Get Started</button>
-                <button onClick={handleDemoMode} className="px-16 py-6 border border-white/10 glass-morphism text-white font-black uppercase tracking-[0.2em] rounded-full hover:bg-white/10 transition-all duration-500">Live Demo</button>
-              </div>
+              {/* Change to flex-col for mobile, flex-row for desktop */}
+<div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 w-full max-w-xs md:max-w-none mx-auto">
+  
+  <button 
+    onClick={() => setShowHero(false)} 
+    className="w-full md:w-auto px-10 md:px-16 py-4 md:py-6 bg-white text-black font-black uppercase tracking-[0.2em] rounded-full hover:scale-105 md:hover:scale-110 hover:shadow-[0_0_50px_rgba(255,255,255,0.4)] transition-all duration-500 text-xs md:text-base"
+  >
+    Get Started
+  </button>
+
+  <button 
+    onClick={handleDemoMode} 
+    className="w-full md:w-auto px-10 md:px-16 py-4 md:py-6 border border-white/10 glass-morphism text-white font-black uppercase tracking-[0.2em] rounded-full hover:bg-white/10 transition-all duration-500 text-xs md:text-base"
+  >
+    Live Demo
+  </button>
+
+</div>
               <InfoBentoGrid />
             </div>
           </motion.div>
@@ -563,12 +577,13 @@ function App() {
                               </div>
                             </div>
 
-                            <div className="glass-morphism rounded-[3rem] p-12 relative mb-24 border border-white/5">
-  <div className="flex justify-between items-center mb-12">
+                            <div className="glass-morphism rounded-3xl md:rounded-[3rem] p-6 md:p-12 relative mb-12 md:mb-24 border border-white/5">
+  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8 md:mb-12">
     <h3 className="text-sm font-black tracking-[0.4em] uppercase flex items-center gap-4">
       <Zap className="text-purple-500 fill-purple-500/20" size={20} /> Neural Flow Map
     </h3>
-    <button onClick={() => setIsAiOpen(true)} className="px-10 py-3 bg-purple-500 rounded-full text-[10px] font-black uppercase tracking-[0.2em] hover:shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:scale-105 transition-all">
+    <button onClick={() => setIsAiOpen(true)} className="w-full md:w-auto px-6 md:px-10 py-3 bg-purple-500 rounded-full text-[9px] md:text-[10px] font-black uppercase tracking-[0.1em] md:tracking-[0.2em] hover:shadow-[0_0_40px_rgba(168,85,247,0.5)] hover:scale-105 transition-all"
+    >
       Launch AI Analysis
     </button>
   </div>
