@@ -307,12 +307,13 @@ function App() {
     }, 2000);
   };
 
-  const API_BASE_URL = "https://ai-hub-backend-ogv1.onrender.com"
+    const API_BASE_URL = "https://ai-hub-backend-ogv1.onrender.com"
 
-  const fetchRepos = async (forceRefresh = false) => {
-    if (!githubUsername || dataSource === 'demo') return
-    setLoading(true)
+    const fetchRepos = async (forceRefresh = false) => {
+    if (!githubUsername || dataSource === 'demo') return;
+    setLoading(true);
     if (!forceRefresh) { setRepos([]); setSelectedRepo(null); }
+    
     try {
       const { data: dbRepos } = await supabase
         .from('repositories').select('*')
@@ -323,36 +324,44 @@ function App() {
         setRepos(dbRepos.map(r => ({ ...r, owner: r.owner_json || { login: githubUsername } })));
         setDataSource('supabase');
       } else {
-        const res = await fetch(`${API_BASE_URL}/api/github/repos?username=${githubUsername}`)
-        const gitData = await res.json()
+        const res = await fetch(`${API_BASE_URL}/api/github/repos?username=${githubUsername}`);
+        const gitData = await res.json();
+        
         if (res.ok && gitData.length > 0) {
           setRepos(gitData);
           setDataSource('github');
+          
           const toSave = gitData.map(r => ({
-            id: r.id, name: r.name, user_id: session.user.id,
+            id: r.id, 
+            name: r.name, 
+            user_id: session.user.id,
             owner_username: githubUsername.toLowerCase(),
-            language: r.language, stargazers_count: r.stargazers_count, owner_json: r.owner
+            language: r.language, 
+            stargazers_count: r.stargazers_count, 
+            owner_json: r.owner 
           }));
-          await supabase.from('repositories').upsert(toSave);
+
+          const { error: upsertError } = await supabase.from('repositories').upsert(toSave);
+          if (upsertError) console.error("Supabase Error:", upsertError.message);
         }
       }
-    } catch (e) { console.error(e) }
-    setLoading(false)
-  }
+    } catch (e) { console.error(e); }
+    setLoading(false);
+  }; // <--- This closing brace was likely missing!
 
-  const fetchPRs = async (repo, forceRefresh = false) => {
-    if (dataSource === 'demo') {
-        setSelectedRepo(repo);
-        return;
-    }
-    setLoadingPRs(true);
-    setSelectedRepo(repo);
-    if (!forceRefresh) { setPrs([]); setMetrics(null); }
-    try {
-      const { data: dbPrs } = await supabase
-        .from('pull_requests').select('*')
-        .eq('repo_id', repo.id)
-        .eq('user_id', session.user.id);
+    const fetchPRs = async (repo, forceRefresh = false) => {
+      if (dataSource === 'demo') {
+          setSelectedRepo(repo);
+          return;
+      }
+      setLoadingPRs(true);
+      setSelectedRepo(repo);
+      if (!forceRefresh) { setPrs([]); setMetrics(null); }
+      try {
+        const { data: dbPrs } = await supabase
+          .from('pull_requests').select('*')
+          .eq('repo_id', repo.id)
+          .eq('user_id', session.user.id);
 
       if (dbPrs?.length > 0 && !forceRefresh) {
         setPrs(dbPrs);
