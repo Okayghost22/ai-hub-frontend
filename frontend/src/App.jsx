@@ -583,25 +583,29 @@ function App() {
       /* FIX: Remove minHeight from here and use aspect if needed, 
          but mostly ensure it is wrapped in the fixed-height div above */
       <ResponsiveContainer width="100%" height="100%" debounce={50}>
-        <BarChart data={visiblePrs.slice(0, 15)} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-          <defs>
-            <linearGradient id="riskHigh" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#ef4444" stopOpacity={1}/>
-              <stop offset="95%" stopColor="#ef4444" stopOpacity={0.2}/>
-            </linearGradient>
-            <linearGradient id="riskLow" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#a855f7" stopOpacity={1}/>
-              <stop offset="95%" stopColor="#6366f1" stopOpacity={0.2}/>
-            </linearGradient>
-          </defs>
-          <Bar dataKey="cycle_days" radius={[10, 10, 10, 10]}>
-            {visiblePrs.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.riskScore > 70 ? "url(#riskHigh)" : "url(#riskLow)"} />
-            ))}
-          </Bar>
-          <RechartsTooltip cursor={{fill: 'rgba(255,255,255,0.05)'}} />
-        </BarChart>
-      </ResponsiveContainer>
+  <BarChart data={visiblePrs.slice(0, 15)} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+    <defs>
+      <linearGradient id="riskHigh" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="5%" stopColor="#ef4444" stopOpacity={1}/>
+        <stop offset="95%" stopColor="#ef4444" stopOpacity={0.2}/>
+      </linearGradient>
+      <linearGradient id="riskLow" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="5%" stopColor="#a855f7" stopOpacity={1}/>
+        <stop offset="95%" stopColor="#6366f1" stopOpacity={0.2}/>
+      </linearGradient>
+    </defs>
+    <Bar 
+      dataKey="cycle_days" 
+      radius={[10, 10, 10, 10]}
+      isAnimationActive={false} // ADD THIS LINE TO FIX THE WARNING
+    >
+      {visiblePrs.map((entry, index) => (
+        <Cell key={`cell-${index}`} fill={entry.riskScore > 70 ? "url(#riskHigh)" : "url(#riskLow)"} />
+      ))}
+    </Bar>
+    <RechartsTooltip cursor={{fill: 'rgba(255,255,255,0.05)'}} />
+  </BarChart>
+</ResponsiveContainer>
     )}
   </div>
 </div>
